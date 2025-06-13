@@ -1,0 +1,359 @@
+<!--
+Autores:
+- Juan Ignacio Avverame — 346425
+- Ignacio Kapitan — 367560
+-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Sitio de Corredores</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<h2 style="text-align: center;"><strong>Sitio de Corredores</strong></h2>
+
+<img src="img/imagenchampiones.png" alt="Imagen de zapatilla" width="300">
+
+<input class="btn-datosest"  type="button" id="btn-datos" value="Datos">
+<input class="btn-datosest"  type="button" id="btn-estadisticas" value="Estadísticas">
+<p id="mensaje" style="color:green;"></p>
+
+<section id="datos">
+  <h1>Datos</h1>
+
+  <article>
+    <form class="form-carreras">
+      <h3>Carreras</h3>
+      <label for="nombre-carrera">Nombre:</label>
+      <input type="text" class="input-escribir" id="nombre-carrera" maxlength="30" required>
+
+      <label for="departamento">Departamento:</label>
+      <select id="departamento" required>
+        <option value="" disabled selected>Seleccione</option>
+        <option>Montevideo</option>
+        <option>Canelones</option>
+        <option>Maldonado</option>
+        <option>Rocha</option>
+        <option>Treinta y Tres</option>
+        <option>Cerro Largo</option>
+        <option>Rivera</option>
+        <option>Artigas</option>
+        <option>Salto</option>
+        <option>Paysandú</option>
+        <option>Río Negro</option>
+        <option>Soriano</option>
+        <option>Colonia</option>
+        <option>San José</option>
+        <option>Flores</option>
+        <option>Florida</option>
+        <option>Lavalleja</option>
+        <option>Durazno</option>
+        <option>Tacuarembó</option>
+      </select>
+
+      <label for="fecha">Fecha:</label>
+      <input type="date" class="input-escribir" id="fecha" name="fecha" required>
+
+      <label for="cupo">Cupo:</label>
+      <input type="number" class="input-escribir" id="cupo" min="1" max="1000" value="30" required>
+
+      <input type="button" id="btnagregarcarrera" value="Agregar Carrera">
+    </form>
+  </article>
+
+  <article>
+    <form class="form-patrocinadores">
+      <h3>Patrocinadores</h3>
+
+      <label for="nombre-patrocinador">Nombre:</label>
+      <input type="text" id="nombre-patrocinador" class="input-escribir" maxlength="30" required>
+
+      <label for="rubro">Rubro:</label>
+      <select id="rubro" required>
+        <option value="" disabled selected>Seleccione</option>
+        <option>Alimenticio</option>
+        <option>Ropa Deportiva</option>
+        <option>Banco</option>
+        <option>Farmacia</option>
+        <option>Bebidas</option>
+        <option>Estatal</option>
+        <option>General</option>
+      </select>
+
+      <label for="carreras-patrocinador">Carreras:</label>
+      <select id="carreras-patrocinador" multiple required size="3"></select>
+
+      <input type="button" value="Agregar/Actualizar Patrocinador">
+    </form>
+  </article>
+
+  <article>
+    <form class="form-corredores">
+      <h3>Corredores</h3>
+
+      <label for="nombre-corredor">Nombre:</label>
+      <input type="text" id="nombre-corredor" class="input-escribir"  required>
+
+      <label for="edad"> Edad:  </label>
+      <input type="number" class="input-escribir" id="edad" required min="18" max="100">
+
+      <label for="cedula">Cédula:</label>
+      <input type="text" class="input-escribir" id="cedula" required>
+
+      <label for="fichamedica">Fecha de vencimiento de ficha médica:</label>
+      <input class="input-escribir" type="date" id="fichamedica" required>
+
+      <label>Tipo de corredor:</label>
+      <input type="radio" class="input-seleccionar" name="tipo" value="elite"> Deportista de élite
+      <input type="radio" class="input-seleccionar" name="tipo" value="comun" checked> Deportista común
+
+      <input type="button" id="btnagregarcorredor" value="Agregar Corredor">
+    </form>
+  </article>
+
+  <article>
+    <form class="form-inscripciones">
+      <h3>Inscripciones</h3>
+
+      <label for="idcorredores">Corredores:</label>
+      <select id="idcorredores" required></select>
+
+      <label for="idcarreras">Carreras:</label>
+      <select id="idcarreras" required></select>
+
+      <input type="button" id="btninscribir" value="Inscribir">
+    </form>
+  </article>
+</section>
+
+<section id="seccion-estadisticas" style="display:none;">
+  <h2 id="estadisticas">Estadísticas</h2>
+
+  <article>
+    <form class="form-estadisticas">
+      <h3>Datos generales</h3>
+      <p>Promedio de inscriptos por carrera: sin datos</p>
+      <p>Carrera/s con más inscriptos:</p>
+      <ul><li>sin datos</li></ul>
+      <p>Carreras sin inscriptos ordenadas por fecha:</p>
+      <ul><li>sin datos</li></ul>
+      <p>Porcentaje de corredores de élite: sin datos</p>
+    </form>
+  </article>
+
+  <article>
+    <form class="form-consultas">
+      <h3>Consulta inscriptos</h3>
+      <label for="consulta-carrera">Carrera:</label>
+      <select id="consulta-carrera"></select>
+
+      <label>Ordenar por:</label>
+      <input type="radio" class="input-seleccionar"  name="ordenar" value="nombre" checked> Nombre
+      <input type="radio" class="input-seleccionar"  name="ordenar" value="numero"> Número
+
+      <table>
+        <caption>Inscriptos</caption>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Edad</th>
+            <th>Cédula</th>
+            <th>Ficha Médica</th>
+            <th>Número</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </form>
+  </article>
+
+  <article id="espacio">
+    <form class="form-mapa">
+
+      
+      <h3>Visualizar Mapa:</h3>
+      <input type="radio" class="input-seleccionar" name="mapa" value="carreras" checked> Por Carreras
+      <input type="radio" class="input-seleccionar" name="mapa" value="inscripciones"> Por Inscripciones
+      <div id="mapa-google-chart" style="width: 600px; height: 400px; margin-top: 20px; max-width: 100%;"></div>
+    </form>
+    <div id="mapa"></div>
+
+
+  </article>
+</section>
+
+<footer id="footer">
+  <p>Programación I - Obligatorio 1er semestre 2025 - Autores:</p>
+  <p>Grupo M1C - Juan Ignacio Avverame — (Número 346425) - <a href="https://www.linkedin.com/in/juan-ignacio-avverame-371820365">Link</a></p>
+  <p>Grupo M1C - Ignacio Kapitan — (Número 367560) - <a href="https://www.linkedin.com/in/ignacio-kapitan-touya-a82857369/">Link</a></p>
+</footer>
+
+<script src="js/clases.js"></script>
+<script src="js/funciones.js"></script>
+<!-- <script src="js/generarpdf.js"></script> -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+google.charts.load('current', {
+  'packages':['geochart'],
+  'mapsApiKey': 'AIzaSyD2-0w6wFQw9nQwQwQwQwQwQ'
+});
+google.charts.setOnLoadCallback(drawMapaCarreras);
+
+function getDatosMapa(tipo) {
+  let departamentos = [
+    "Artigas","Canelones","Cerro Largo","Colonia","Durazno","Flores","Florida","Lavalleja","Maldonado",
+    "Montevideo","Paysandú","Río Negro","Rivera","Rocha","Salto","San José","Soriano","Tacuarembó","Treinta y Tres"
+  ];
+  let datos = {};
+  for (let i = 0; i < departamentos.length; i++) {
+    datos[departamentos[i]] = 0;
+  }
+  if (window.sistema && sistema.listaCarreras) {
+    if (tipo === "carreras") {
+      for (let i = 0; i < sistema.listaCarreras.length; i++) {
+        let dep = sistema.listaCarreras[i].departamento;
+        let nombreDep = departamentos[dep - 1];
+        if (nombreDep) datos[nombreDep]++;
+      }
+    } else if (tipo === "inscripciones") {
+      for (let i = 0; i < sistema.listaCarreras.length; i++) {
+        let dep = sistema.listaCarreras[i].departamento;
+        let nombreDep = departamentos[dep - 1];
+        if (nombreDep) datos[nombreDep] += sistema.listaCarreras[i].inscriptos.length;
+      }
+    }
+  }
+  return datos;
+}
+
+function drawMapaCarreras() {
+  drawMapaGoogleChart("carreras");
+}
+
+function drawMapaGoogleChart(tipo) {
+  let datos = getDatosMapa(tipo);
+  let dataArray = [['Departamento', 'Cantidad', { role: 'tooltip', type: 'string', p: { html: true } }]];
+  let maxCantidad = 0;
+  for (let dep in datos) {
+    if (datos[dep] > maxCantidad) maxCantidad = datos[dep];
+  }
+  let codigosUY = {
+    "Artigas": "UY-AR",
+    "Canelones": "UY-CA",
+    "Cerro Largo": "UY-CL",
+    "Colonia": "UY-CO",
+    "Durazno": "UY-DU",
+    "Flores": "UY-FS",
+    "Florida": "UY-FD",
+    "Lavalleja": "UY-LA",
+    "Maldonado": "UY-MA",
+    "Montevideo": "UY-MO",
+    "Paysandú": "UY-PA",
+    "Río Negro": "UY-RN",
+    "Rivera": "UY-RV",
+    "Rocha": "UY-RO",
+    "Salto": "UY-SA",
+    "San José": "UY-SJ",
+    "Soriano": "UY-SO",
+    "Tacuarembó": "UY-TA",
+    "Treinta y Tres": "UY-TT"
+  };
+  for (let dep in datos) {
+    let cantidad = datos[dep];
+    let tooltip = '<div style="padding:10px 15px 10px 15px; background:white; border-radius:8px; border:1px solid #888;">' +
+      '<div style="font-weight:bold; font-size:16px; margin-bottom:4px;">' + dep + '</div>' +
+      '<div style="font-size:14px;">Cantidad: ' + cantidad + '</div></div>';
+    let codigo = codigosUY[dep] || dep;
+    dataArray.push([codigo, cantidad, tooltip]);
+  }
+  let data = google.visualization.arrayToDataTable(dataArray);
+
+  let colorAxis;
+  if (maxCantidad > 0) {
+    colorAxis = {
+      minValue: 0,
+      maxValue: maxCantidad,
+      colors: ['#e0f3db', '#43a2ca', '#0868ac']
+    };
+  } else {
+    colorAxis = {
+      minValue: 0,
+      maxValue: 1,
+      colors: ['#e0f3db', '#43a2ca', '#0868ac']
+    };
+  }
+
+  let options = {
+    region: 'UY',
+    displayMode: 'regions',
+    resolution: 'provinces',
+    colorAxis: colorAxis,
+    backgroundColor: '#f8fff8',
+    datalessRegionColor: '#f0f0f0',
+    defaultColor: '#f0f0f0',
+    tooltip: { isHtml: true },
+    width: 600,
+    height: 400,
+    keepAspectRatio: true,
+    chartArea: {left:0,top:0,width:'100%',height:'100%'}
+  };
+
+  let contenedor = document.getElementById('mapa-google-chart');
+  if (contenedor) contenedor.innerHTML = "";
+
+  let chart = new google.visualization.GeoChart(contenedor);
+  chart.draw(data, options);
+}
+
+function redibujarMapa() {
+  if (typeof drawMapaGoogleChart === "function") {
+    let tipo = document.querySelector('.form-mapa input[name="mapa"]:checked');
+    if (tipo) {
+      drawMapaGoogleChart(tipo.value);
+    }
+  }
+}
+
+(function() {
+  let origAgregarCarrera = window.agregarCarrera;
+  window.agregarCarrera = function() {
+    if (origAgregarCarrera) origAgregarCarrera.apply(this, arguments);
+    setTimeout(redibujarMapa, 0);
+  };
+  let origInscribirCorredor = window.inscribirCorredor;
+  window.inscribirCorredor = function() {
+    if (origInscribirCorredor) origInscribirCorredor.apply(this, arguments);
+    setTimeout(redibujarMapa, 0);
+  };
+  let origActualizarCombosCarreras = window.actualizarCombosCarreras;
+  window.actualizarCombosCarreras = function() {
+    if (origActualizarCombosCarreras) origActualizarCombosCarreras.apply(this, arguments);
+    setTimeout(redibujarMapa, 0);
+  };
+  let origActualizarCombosInscripciones = window.actualizarCombosInscripciones;
+  window.actualizarCombosInscripciones = function() {
+    if (origActualizarCombosInscripciones) origActualizarCombosInscripciones.apply(this, arguments);
+    setTimeout(redibujarMapa, 0);
+  };
+})();
+
+document.addEventListener("DOMContentLoaded", function() {
+  let radios = document.querySelectorAll('.form-mapa input[name="mapa"]');
+  for (let i = 0; i < radios.length; i++) {
+    radios[i].addEventListener("change", function() {
+      let tipo = document.querySelector('.form-mapa input[name="mapa"]:checked').value;
+      drawMapaGoogleChart(tipo);
+    });
+  }
+  window.addEventListener('resize', function() {
+    redibujarMapa();
+  });
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</body>
+</html>
+
