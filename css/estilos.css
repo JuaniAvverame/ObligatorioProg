@@ -1,8 +1,9 @@
 form {
-  background-color:#OOFFOO ;
-  border-radius: 30px;
+  background-color: palegreen; 
+  border-radius: 15px;
   padding: 15px;
-  
+  height: auto;
+  width: auto;
 }
 
 #consulta-carrera{
@@ -36,7 +37,15 @@ article{
   border-radius: 15px;
   padding: 15px;
   margin-top: 10px;
+  width: auto;
+  max-width: none;
+  min-width: 0;
+  min-height: 0;
+  margin-left: 0;
+  margin-right: 0;
+  box-sizing: border-box;
 }
+
 section{
   background-color:rgb(142, 248, 185);
   border-radius: 15px;
@@ -58,15 +67,11 @@ table {
       text-align: center;
       font-weight: bold; 
     }
-.btn-datosest {
-  /* Sin estilos extra, vuelve a ser un input normal */
-}
 
 .btn-datosest.activo {
   background-color: #4caf50;
 }
 
-/* Fondo igual para ambas secciones */
 #datos, #seccion-estadisticas {
   background-color: #CCFFCC;
   border-radius: 15px;
@@ -94,12 +99,12 @@ table {
 
 .inline-display {
   display: inline-block;
-  margin-right: 10px; /* Optional spacing */
+  margin-right: 10px; 
 }
 input, label{
   display: block}
 
-/* Botones de navegación en línea */
+
 #btn-datos,
 #btn-estadisticas {
   display: inline;
@@ -111,3 +116,31 @@ input, label{
   color: #b30000 !important;
   font-weight: bold;
 }
+
+
+#mapa {
+  width: 100%;
+  height: 400px; 
+  background-color: palegreen;
+  margin: 0 auto;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+}
+
+
+.form-mapa {
+  background-color:palegreen;
+  border: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+}
+
+
+.form-mapa h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-left: 30px;
+}
+

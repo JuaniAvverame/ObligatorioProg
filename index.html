@@ -9,6 +9,11 @@ Autores:
   <meta charset="utf-8">
   <title>Sitio de Corredores</title>
   <link rel="stylesheet" href="css/estilos.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+ <script src="js/clases.js"></script>
+  <script src="js/funciones.js"></script>
+  <script src="js/mapa.js"></script>
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <body>
 
@@ -118,10 +123,14 @@ Autores:
       <h3>Inscripciones</h3>
 
       <label for="idcorredores">Corredores:</label>
-      <select id="idcorredores" required></select>
+      <select id="idcorredores" required>
+        <option value="" disabled selected>Seleccione un corredor</option>
+      </select>
 
       <label for="idcarreras">Carreras:</label>
-      <select id="idcarreras" required></select>
+      <select id="idcarreras" required>
+        <option value="" disabled selected>Seleccione una carrera</option>
+      </select>
 
       <input type="button" id="btninscribir" value="Inscribir">
     </form>
@@ -147,7 +156,9 @@ Autores:
     <form class="form-consultas">
       <h3>Consulta inscriptos</h3>
       <label for="consulta-carrera">Carrera:</label>
-      <select id="consulta-carrera"></select>
+      <select id="consulta-carrera">
+        <option value="" disabled selected>Seleccione una carrera</option>
+      </select>
 
       <label>Ordenar por:</label>
       <input type="radio" class="input-seleccionar"  name="ordenar" value="nombre" checked> Nombre
@@ -169,18 +180,15 @@ Autores:
     </form>
   </article>
 
-  <article id="espacio">
+  <article id="espacio" >
     <form class="form-mapa">
-
-      
       <h3>Visualizar Mapa:</h3>
-      <input type="radio" class="input-seleccionar" name="mapa" value="carreras" checked> Por Carreras
-      <input type="radio" class="input-seleccionar" name="mapa" value="inscripciones"> Por Inscripciones
-      <div id="mapa-google-chart" style="width: 600px; height: 400px; margin-top: 20px; max-width: 100%;"></div>
+      <div>
+        <input type="radio" class="input-seleccionar" id="idporCarreras" name="tipoMapa" checked> Por Carreras
+        <input type="radio" class="input-seleccionar" id="idporInscripciones" name="tipoMapa"> Por Inscripciones
+      </div>
+      <div id="mapa"></div>
     </form>
-    <div id="mapa"></div>
-
-
   </article>
 </section>
 
@@ -190,170 +198,14 @@ Autores:
   <p>Grupo M1C - Ignacio Kapitan — (Número 367560) - <a href="https://www.linkedin.com/in/ignacio-kapitan-touya-a82857369/">Link</a></p>
 </footer>
 
-<script src="js/clases.js"></script>
-<script src="js/funciones.js"></script>
-<!-- <script src="js/generarpdf.js"></script> -->
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
-google.charts.load('current', {
-  'packages':['geochart'],
-  'mapsApiKey': 'AIzaSyD2-0w6wFQw9nQwQwQwQwQwQ'
-});
-google.charts.setOnLoadCallback(drawMapaCarreras);
-
-function getDatosMapa(tipo) {
-  let departamentos = [
-    "Artigas","Canelones","Cerro Largo","Colonia","Durazno","Flores","Florida","Lavalleja","Maldonado",
-    "Montevideo","Paysandú","Río Negro","Rivera","Rocha","Salto","San José","Soriano","Tacuarembó","Treinta y Tres"
-  ];
-  let datos = {};
-  for (let i = 0; i < departamentos.length; i++) {
-    datos[departamentos[i]] = 0;
-  }
-  if (window.sistema && sistema.listaCarreras) {
-    if (tipo === "carreras") {
-      for (let i = 0; i < sistema.listaCarreras.length; i++) {
-        let dep = sistema.listaCarreras[i].departamento;
-        let nombreDep = departamentos[dep - 1];
-        if (nombreDep) datos[nombreDep]++;
-      }
-    } else if (tipo === "inscripciones") {
-      for (let i = 0; i < sistema.listaCarreras.length; i++) {
-        let dep = sistema.listaCarreras[i].departamento;
-        let nombreDep = departamentos[dep - 1];
-        if (nombreDep) datos[nombreDep] += sistema.listaCarreras[i].inscriptos.length;
-      }
-    }
-  }
-  return datos;
-}
-
-function drawMapaCarreras() {
-  drawMapaGoogleChart("carreras");
-}
-
-function drawMapaGoogleChart(tipo) {
-  let datos = getDatosMapa(tipo);
-  let dataArray = [['Departamento', 'Cantidad', { role: 'tooltip', type: 'string', p: { html: true } }]];
-  let maxCantidad = 0;
-  for (let dep in datos) {
-    if (datos[dep] > maxCantidad) maxCantidad = datos[dep];
-  }
-  let codigosUY = {
-    "Artigas": "UY-AR",
-    "Canelones": "UY-CA",
-    "Cerro Largo": "UY-CL",
-    "Colonia": "UY-CO",
-    "Durazno": "UY-DU",
-    "Flores": "UY-FS",
-    "Florida": "UY-FD",
-    "Lavalleja": "UY-LA",
-    "Maldonado": "UY-MA",
-    "Montevideo": "UY-MO",
-    "Paysandú": "UY-PA",
-    "Río Negro": "UY-RN",
-    "Rivera": "UY-RV",
-    "Rocha": "UY-RO",
-    "Salto": "UY-SA",
-    "San José": "UY-SJ",
-    "Soriano": "UY-SO",
-    "Tacuarembó": "UY-TA",
-    "Treinta y Tres": "UY-TT"
-  };
-  for (let dep in datos) {
-    let cantidad = datos[dep];
-    let tooltip = '<div style="padding:10px 15px 10px 15px; background:white; border-radius:8px; border:1px solid #888;">' +
-      '<div style="font-weight:bold; font-size:16px; margin-bottom:4px;">' + dep + '</div>' +
-      '<div style="font-size:14px;">Cantidad: ' + cantidad + '</div></div>';
-    let codigo = codigosUY[dep] || dep;
-    dataArray.push([codigo, cantidad, tooltip]);
-  }
-  let data = google.visualization.arrayToDataTable(dataArray);
-
-  let colorAxis;
-  if (maxCantidad > 0) {
-    colorAxis = {
-      minValue: 0,
-      maxValue: maxCantidad,
-      colors: ['#e0f3db', '#43a2ca', '#0868ac']
-    };
-  } else {
-    colorAxis = {
-      minValue: 0,
-      maxValue: 1,
-      colors: ['#e0f3db', '#43a2ca', '#0868ac']
-    };
-  }
-
-  let options = {
-    region: 'UY',
-    displayMode: 'regions',
-    resolution: 'provinces',
-    colorAxis: colorAxis,
-    backgroundColor: '#f8fff8',
-    datalessRegionColor: '#f0f0f0',
-    defaultColor: '#f0f0f0',
-    tooltip: { isHtml: true },
-    width: 600,
-    height: 400,
-    keepAspectRatio: true,
-    chartArea: {left:0,top:0,width:'100%',height:'100%'}
-  };
-
-  let contenedor = document.getElementById('mapa-google-chart');
-  if (contenedor) contenedor.innerHTML = "";
-
-  let chart = new google.visualization.GeoChart(contenedor);
-  chart.draw(data, options);
-}
-
-function redibujarMapa() {
-  if (typeof drawMapaGoogleChart === "function") {
-    let tipo = document.querySelector('.form-mapa input[name="mapa"]:checked');
-    if (tipo) {
-      drawMapaGoogleChart(tipo.value);
-    }
-  }
-}
-
-(function() {
-  let origAgregarCarrera = window.agregarCarrera;
-  window.agregarCarrera = function() {
-    if (origAgregarCarrera) origAgregarCarrera.apply(this, arguments);
-    setTimeout(redibujarMapa, 0);
-  };
-  let origInscribirCorredor = window.inscribirCorredor;
-  window.inscribirCorredor = function() {
-    if (origInscribirCorredor) origInscribirCorredor.apply(this, arguments);
-    setTimeout(redibujarMapa, 0);
-  };
-  let origActualizarCombosCarreras = window.actualizarCombosCarreras;
-  window.actualizarCombosCarreras = function() {
-    if (origActualizarCombosCarreras) origActualizarCombosCarreras.apply(this, arguments);
-    setTimeout(redibujarMapa, 0);
-  };
-  let origActualizarCombosInscripciones = window.actualizarCombosInscripciones;
-  window.actualizarCombosInscripciones = function() {
-    if (origActualizarCombosInscripciones) origActualizarCombosInscripciones.apply(this, arguments);
-    setTimeout(redibujarMapa, 0);
-  };
-})();
-
-document.addEventListener("DOMContentLoaded", function() {
-  let radios = document.querySelectorAll('.form-mapa input[name="mapa"]');
-  for (let i = 0; i < radios.length; i++) {
-    radios[i].addEventListener("change", function() {
-      let tipo = document.querySelector('.form-mapa input[name="mapa"]:checked').value;
-      drawMapaGoogleChart(tipo);
-    });
-  }
-  window.addEventListener('resize', function() {
-    redibujarMapa();
-  });
+google.charts.load('current', { packages: ['geochart'] });
+google.charts.setOnLoadCallback(function() {
+  if (typeof Mapa === "function") Mapa();
+  document.getElementById("idporCarreras").addEventListener("change", Mapa);
+  document.getElementById("idporInscripciones").addEventListener("change", Mapa);
 });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-</body>
-</html>
+</body></html>
 
